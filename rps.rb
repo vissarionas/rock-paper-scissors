@@ -18,8 +18,17 @@ SCENARIOS = {
   }
 }.freeze
 
-system 'clear'
-puts 'Welcome to RockPaperScissors'
+def play_again?
+  print "\nWould you like to play again? (Y/N) "
+  replay = gets.chomp.upcase
+  replay == 'Y'
+end
+
+def print_result(user_tool, computer_tool)
+  puts "\nYou chose #{user_tool} "\
+    "and computer chose #{computer_tool}"
+  puts SCENARIOS[user_tool][computer_tool]
+end
 
 def selected_tool(user_selection)
   case user_selection
@@ -32,30 +41,28 @@ def selected_tool(user_selection)
   end
 end
 
-def get_user_choice
+def user_choice
   loop do
-    print 'Choose one: (R/P/S): '
-    user_selection = gets.chomp.upcase
-    selected_tool = selected_tool(user_selection)
+    print 'Choose one: (R: rock /P: paper /S: sciccors): '
+    user_choice = gets.chomp.upcase
+    selected_tool = selected_tool(user_choice)
     return selected_tool if SCENARIOS.key? selected_tool
   end
 end
 
-def play_again?
-  print 'Would you like to play again? (Y/N) '
-  replay = gets.chomp.upcase
-  replay == 'Y'
+def computer_choice
+  SCENARIOS.keys.sample
 end
 
+def prepare_platform
+  system 'clear'
+  puts 'Rock-Paper-Scissors'
+end
 
 loop do
-  user_selection = get_user_choice
-
-  computer_selection = SCENARIOS.keys.sample
-  puts "Your choice #{user_selection} "\
-    "computer choice #{computer_selection}"
-
-  # puts SCENARIOS[user_selection][computer_selection.to_sym]
-
+  prepare_platform
+  user_tool = user_choice
+  computer_tool = computer_choice
+  print_result(user_tool, computer_tool)
   break unless play_again?
 end
