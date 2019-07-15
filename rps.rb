@@ -1,34 +1,43 @@
 # frozen_string_literal: true
 
 SCENARIOS = {
-  R: {
-    S: "Rock breaks scissor\nYou won!!",
-    P: "Paper covers rock\nYou Lost :(",
-    R: "Rock against rock\nIt's a tie",
-    tool: 'rock'
+  'rock' => {
+    'scissors' => "Rock breaks scissor\nYou won!!",
+    'paper' => "Paper covers rock\nYou Lost :(",
+    'rock' => "Rock against rock\nIt's a tie"
   },
-  P: {
-    R: "Paper covers rock\nYou won!!",
-    S: "Scissors cut paper\nYou lost :(",
-    P: "Paper against paper\nIt's a tie",
-    tool: 'paper'
+  'paper' => {
+    'rock' => "Paper covers rock\nYou won!!",
+    'scissors' => "Scissors cut paper\nYou lost :(",
+    'paper' => "Paper against paper\nIt's a tie"
   },
-  S: {
-    P: "Scissors cut paper\nYou won!!",
-    R: "Rock breaks scissor\nYou lost :(",
-    S: "Scissors against scissors\nIt's a tie",
-    tool: 'scissor'
+  'scissors' => {
+    'paper' => "Scissors cut paper\nYou won!!",
+    'rock' => "Rock breaks scissor\nYou lost :(",
+    'scissors' => "Scissors against scissors\nIt's a tie"
   }
 }.freeze
 
 system 'clear'
 puts 'Welcome to RockPaperScissors'
 
-def get_user_choice_as_sym
+def selected_tool(user_selection)
+  case user_selection
+  when 'R'
+    'rock'
+  when 'P'
+    'paper'
+  when 'S'
+    'scissors'
+  end
+end
+
+def get_user_choice
   loop do
     print 'Choose one: (R/P/S): '
-    choice = gets.chomp.upcase
-    return choice.to_sym if SCENARIOS.keys.include? choice.to_sym
+    user_selection = gets.chomp.upcase
+    selected_tool = selected_tool(user_selection)
+    return selected_tool if SCENARIOS.key? selected_tool
   end
 end
 
@@ -40,14 +49,13 @@ end
 
 
 loop do
-  user_selection = get_user_choice_as_sym
+  user_selection = get_user_choice
 
-  computer_selection = SCENARIOS.keys[Random.new.rand 3]
+  computer_selection = SCENARIOS.keys.sample
+  puts "Your choice #{user_selection} "\
+    "computer choice #{computer_selection}"
 
-  puts "Your choice #{SCENARIOS[user_selection][:tool]} "\
-    "computer choice #{SCENARIOS[computer_selection.to_sym][:tool]}"
-
-  puts SCENARIOS[user_selection][computer_selection.to_sym]
+  # puts SCENARIOS[user_selection][computer_selection.to_sym]
 
   break unless play_again?
 end
